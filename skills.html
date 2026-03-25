@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Enter Details - AI Career Guide</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"></noscript>
+
+</head>
+
+<body>
+  <header class="top-bar">
+    <h1>AI Career Guide System</h1>
+</header>
+
+<section class="skill-container">
+
+<div class="skill-box">
+
+<h2>Enter Your Details</h2>
+
+<form id="skillForm">
+
+<label>Skills</label><br>
+<textarea
+id="skills"
+placeholder="Example: Python, HTML, Communication"
+required
+></textarea>
+
+<br><br>
+
+<label>Interest</label><br>
+<input
+type="text"
+id="interest"
+placeholder="Example: AI, Web, Cloud"
+required
+>
+
+<br><br>
+
+<label>CGPA</label><br>
+<input
+type="number"
+id="cgpa"
+step="0.1"
+placeholder="Example: 8.2"
+required
+>
+
+<br><br>
+
+<label>Preferred Field</label><br>
+<input
+type="text"
+id="field"
+placeholder="Example: IT, Design, Teaching"
+required
+>
+
+<br><br>
+
+<button type="submit" class="btn">
+Analyze Career
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+
+<script src="ai.js"></script>
+
+<script>
+
+document.getElementById("skillForm").addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    const submitBtn = document.querySelector("#skillForm button");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Analyzing...";
+
+    let skills =
+    document.getElementById("skills").value.toLowerCase();
+
+    let interest =
+    document.getElementById("interest").value.toLowerCase();
+
+    let career = "Software Developer";
+
+    try {
+        career = await getCareer(skills + " " + interest);
+    } catch (error) {
+        console.error("AI API failed, using default logic", error);
+        // fallback to original logic
+        if (skills.includes("python") || interest.includes("ai")) {
+            career = "Data Scientist";
+        }
+        else if (skills.includes("html") || interest.includes("web")) {
+            career = "Web Developer";
+        }
+        else if (skills.includes("cloud")) {
+            career = "Cloud Engineer";
+        }
+        else if (interest.includes("design")) {
+            career = "UI Designer";
+        }
+        else if (interest.includes("teaching")) {
+            career = "Teacher";
+        }
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Analyze Career";
+
+localStorage.setItem("careerResult", career);
+localStorage.setItem("skills", skills);
+localStorage.setItem("interest", interest);
+
+let cgpa =
+document.getElementById("cgpa").value;
+
+let field =
+document.getElementById("field").value;
+
+localStorage.setItem("cgpa", cgpa);
+localStorage.setItem("field", field);
+
+    window.location.href = "result.html";
+
+});
+
+</script>
+
+</body>
+</html>
