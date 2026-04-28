@@ -5,7 +5,7 @@ async function getCareer() {
     const field = document.getElementById("field").value;
 
     try {
-        const response = await fetch("https://ai-career-guide-project.onrender.com", {
+        const response = await fetch("https://ai-career-guide-project.onrender.com/api/career", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
