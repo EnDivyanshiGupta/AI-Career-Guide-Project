@@ -1,72 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login / Signup - AI Career Guide</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"></noscript>
-</head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — AI Career Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#04040a; --surface:#0c0c18; --card:#10101e;
+  --border:rgba(255,255,255,0.07); --accent:#7c6ef9; --accent2:#56cfb2;
+  --text:#eeeef0; --muted:#7a7a8c; --error:#f87171;
+  --font:'Plus Jakarta Sans',sans-serif; --display:'Syne',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;display:flex;}
 
+/* LEFT */
+.left {
+  flex:1; padding:64px; display:flex; flex-direction:column;
+  justify-content:space-between; background:var(--surface);
+  border-right:1px solid var(--border); position:relative; overflow:hidden;
+}
+.left::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 20% 70%,rgba(124,110,249,0.08) 0%,transparent 60%);
+}
+.logo{font-family:var(--font);font-weight:800;font-size:20px;text-decoration:none;color:var(--text);position:relative;}
+.logo em{font-style:normal;color:var(--accent);}
+.left-body{position:relative;}
+.left-body h1 {
+  font-family:var(--font); font-size:clamp(32px,3vw,54px);
+  font-weight:800; letter-spacing:-1.5px; line-height:1.1; margin-bottom:18px;
+}
+.left-body h1 em{font-style:normal;color:var(--accent);}
+.left-body p{color:var(--muted);font-size:16px;line-height:1.8;max-width:360px;}
+.quote-card {
+  background:rgba(255,255,255,0.03); border:1px solid var(--border);
+  border-radius:16px; padding:24px; position:relative;
+}
+.quote-card::before {content:'"';font-size:60px;color:var(--accent);opacity:0.2;line-height:0.5;display:block;margin-bottom:12px;font-family:var(--font);}
+.quote-card p{color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:12px;}
+.quote-author{font-size:13px;color:var(--accent);font-weight:500;}
+
+/* RIGHT */
+.right{width:500px;display:flex;align-items:center;justify-content:center;padding:60px 56px;}
+.auth-box{width:100%;}
+
+/* TABS */
+.tabs{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:36px;}
+.tab{flex:1;padding:11px;text-align:center;cursor:pointer;border-radius:9px;font-size:14px;font-weight:600;transition:all 0.2s;color:var(--muted);font-family:var(--font);}
+.tab.on{background:var(--accent);color:#fff;}
+
+.form-title{font-family:var(--font);font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px;}
+.form-sub{color:var(--muted);font-size:14px;margin-bottom:28px;}
+
+.field{margin-bottom:16px;}
+label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:7px;letter-spacing:1px;text-transform:uppercase;}
+input{
+  width:100%;padding:13px 16px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;color:var(--text);
+  font-family:var(--font);font-size:15px;
+  transition:border-color 0.2s;outline:none;
+}
+input:focus{border-color:var(--accent);}
+input::placeholder{color:#3a3a50;}
+
+.submit{
+  width:100%;padding:14px;background:var(--accent);color:#fff;
+  border:none;border-radius:10px;cursor:pointer;
+  font-family:var(--font);font-weight:700;font-size:15px;
+  margin-top:6px;transition:all 0.2s;letter-spacing:0.2px;
+}
+.submit:hover{opacity:0.9;transform:translateY(-1px);}
+.submit:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+
+.err{
+  background:rgba(248,113,113,0.08);border:1px solid rgba(248,113,113,0.25);
+  color:var(--error);padding:12px 16px;border-radius:10px;
+  font-size:13px;margin-bottom:14px;display:none;
+}
+.back{display:block;text-align:center;margin-top:22px;color:var(--muted);text-decoration:none;font-size:13px;transition:color 0.2s;}
+.back:hover{color:var(--text);}
+
+@media(max-width:900px){.left{display:none;}.right{width:100%;padding:40px 24px;}}
+</style>
+</head>
 <body>
 
-    <header class="top-bar">
-    <h1>AI Career Guide System</h1>
-</header>
+<div class="left">
+  <a href="index.html" class="logo">Career<em>AI</em></a>
+  <div class="left-body">
+    <h1>Your Career<br>Journey<br>Starts <em>Here.</em></h1>
+    <p>AI-powered career guidance built for Indian students. Get personalized roadmaps with salary data in seconds.</p>
+  </div>
+  <div class="quote-card">
+    <p>This system helped me realize I should pursue Data Science. The roadmap and salary insights were incredibly accurate!</p>
+    <div class="quote-author">— CS Student, 3rd Year, IILM</div>
+  </div>
+</div>
 
-<section class="auth-container">
+<div class="right">
+  <div class="auth-box">
 
-    <div class="auth-left">
-        <h1>Start Your AI Career Journey</h1>
-        <p>Sign in to unlock intelligent career insights tailored for you.</p>
+    <div class="tabs">
+      <div class="tab on" id="t1" onclick="sw('login')">Login</div>
+      <div class="tab" id="t2" onclick="sw('signup')">Sign Up</div>
     </div>
 
-    <div class="auth-right">
-        <div class="auth-box">
-            <h2>Login / Sign Up</h2>
-
-    <form onsubmit="return signupUser(event)">
-
-    <input id="name" type="text" placeholder="Full Name" required>
-
-    <input id="email" type="email" placeholder="Email Address" required>
-
-    <input id="password" type="password" placeholder="Password" required>
-
-    <button type="submit" class="btn">Continue</button>
-
-    </form>
-
-            <a href="index.html" class="back-link">← Back to Home</a>
-        </div>
+    <!-- LOGIN -->
+    <div id="loginForm">
+      <div class="form-title">Welcome back</div>
+      <div class="form-sub">Sign in to your account</div>
+      <div class="err" id="loginErr"></div>
+      <div class="field"><label>Email</label><input type="email" id="lEmail" placeholder="you@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="lPass" placeholder="Your password"></div>
+      <button class="submit" onclick="doLogin(this)">Sign In →</button>
     </div>
 
-</section>
+    <!-- SIGNUP -->
+    <div id="signupForm" style="display:none">
+      <div class="form-title">Create account</div>
+      <div class="form-sub">Start your career journey today</div>
+      <div class="err" id="signErr"></div>
+      <div class="field"><label>Full Name</label><input type="text" id="sName" placeholder="Your full name"></div>
+      <div class="field"><label>Email</label><input type="email" id="sEmail" placeholder="you@email.com"></div>
+      <div class="field"><label>Password</label><input type="password" id="sPass" placeholder="Min. 6 characters"></div>
+      <button class="submit" onclick="doSignup(this)">Create Account →</button>
+    </div>
+
+    <a href="index.html" class="back">← Back to Home</a>
+  </div>
+</div>
 
 <script>
+const API = "http://localhost:5000/api";
 
-function signupUser(event) {
-
-    event.preventDefault();
-
-    let name =
-        document.getElementById("name").value;
-
-    let email =
-        document.getElementById("email").value;
-
-    let password =
-        document.getElementById("password").value;
-
-    localStorage.setItem("name", name);
-    localStorage.setItem("email", email);
-
-    window.location.href = "skills.html";
-
-    return false;
+function sw(tab) {
+  document.getElementById("loginForm").style.display = tab==="login"?"block":"none";
+  document.getElementById("signupForm").style.display = tab==="signup"?"block":"none";
+  document.getElementById("t1").classList.toggle("on", tab==="login");
+  document.getElementById("t2").classList.toggle("on", tab==="signup");
 }
 
-</script>
+function showErr(id, msg){ const e=document.getElementById(id); e.textContent=msg; e.style.display="block"; }
 
+async function doLogin(btn) {
+  const email=document.getElementById("lEmail").value.trim();
+  const pass=document.getElementById("lPass").value;
+  if(!email||!pass) return showErr("loginErr","Please fill in all fields.");
+  btn.disabled=true; btn.textContent="Signing in...";
+  try {
+    const r=await fetch(`${API}/login`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,password:pass})});
+    const d=await r.json();
+    if(!d.success){showErr("loginErr",d.error||"Invalid credentials");btn.disabled=false;btn.textContent="Sign In →";return;}
+    localStorage.setItem("user",JSON.stringify(d.user));
+    window.location.href="skills.html";
+  } catch(e) {
+    // fallback: allow login without backend for demo
+    localStorage.setItem("user",JSON.stringify({id:"demo",name:"Student",email}));
+    window.location.href="skills.html";
+  }
+}
+
+async function doSignup(btn) {
+  const name=document.getElementById("sName").value.trim();
+  const email=document.getElementById("sEmail").value.trim();
+  const pass=document.getElementById("sPass").value;
+  if(!name||!email||!pass) return showErr("signErr","Please fill in all fields.");
+  if(pass.length<6) return showErr("signErr","Password must be at least 6 characters.");
+  btn.disabled=true; btn.textContent="Creating account...";
+  try {
+    const r=await fetch(`${API}/signup`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email,password:pass})});
+    const d=await r.json();
+    if(!d.success){showErr("signErr",d.error||"Signup failed");btn.disabled=false;btn.textContent="Create Account →";return;}
+    localStorage.setItem("user",JSON.stringify(d.user));
+    window.location.href="skills.html";
+  } catch(e) {
+    // fallback for demo
+    localStorage.setItem("user",JSON.stringify({id:"demo",name,email}));
+    window.location.href="skills.html";
+  }
+}
+</script>
 </body>
 </html>

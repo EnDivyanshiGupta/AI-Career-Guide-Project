@@ -1,77 +1,272 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>AI Career Guide</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"></noscript>
-    <link rel="preload" href="ai-image.jpg" as="image">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Career Guide — Find Your Path</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #04040a;
+  --surface: #0c0c18;
+  --card: #10101e;
+  --border: rgba(255,255,255,0.07);
+  --accent: #7c6ef9;
+  --accent2: #56cfb2;
+  --text: #eeeef0;
+  --muted: #7a7a8c;
+  --font: 'Nunito', sans-serif;
+  --display: 'Nunito', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background:var(--bg); color:var(--text); font-family:var(--font); overflow-x:hidden; }
+
+/* NAV */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:18px 64px;
+  background:rgba(4,4,10,0.75);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo { font-family:var(--font); font-size:20px; font-weight:800; letter-spacing:-0.5px; }
+.nav-logo em { font-style:normal; color:var(--accent); }
+.nav-cta {
+  background:var(--accent); color:#fff; padding:10px 24px;
+  border-radius:100px; font-weight:600; font-size:14px;
+  text-decoration:none; transition:opacity 0.2s;
+  letter-spacing:0.2px;
+}
+.nav-cta:hover { opacity:0.85; }
+
+/* HERO */
+.hero {
+  min-height:100vh; display:flex; align-items:center; justify-content:center;
+  text-align:center; padding:120px 40px 80px;
+  position:relative;
+}
+.hero-grid {
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(124,110,249,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,110,249,0.04) 1px, transparent 1px);
+  background-size:64px 64px;
+}
+.hero-glow {
+  position:absolute; width:700px; height:700px; border-radius:50%;
+  background:radial-gradient(circle, rgba(124,110,249,0.12) 0%, transparent 65%);
+  top:50%; left:50%; transform:translate(-50%,-55%);
+  pointer-events:none;
+}
+.hero-inner { position:relative; z-index:2; max-width:800px; }
+.hero-pill {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(124,110,249,0.1); border:1px solid rgba(124,110,249,0.3);
+  color:#a89cf7; padding:7px 18px; border-radius:100px;
+  font-size:13px; font-weight:500; letter-spacing:0.3px;
+  margin-bottom:32px;
+  animation:fadeUp 0.6s ease both;
+}
+.hero-pill span { width:6px; height:6px; background:#7c6ef9; border-radius:50%; animation:blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+h1 {
+  font-family:var(--font); font-size:clamp(44px,7vw,84px);
+  font-weight:800; line-height:1.0; letter-spacing:-3px;
+  animation:fadeUp 0.6s 0.1s ease both;
+}
+h1 .grad {
+  background:linear-gradient(135deg,#a89cf7 0%,#56cfb2 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+.hero-desc {
+  color:var(--muted); font-size:18px; line-height:1.7; max-width:520px;
+  margin:24px auto 44px; animation:fadeUp 0.6s 0.2s ease both;
+}
+.hero-btns { display:flex; gap:14px; justify-content:center; animation:fadeUp 0.6s 0.3s ease both; }
+.btn-main {
+  background:var(--accent); color:#fff; padding:15px 36px;
+  border-radius:100px; font-weight:600; font-size:15px;
+  text-decoration:none; transition:all 0.25s; letter-spacing:0.2px;
+}
+.btn-main:hover { transform:translateY(-2px); box-shadow:0 16px 48px rgba(124,110,249,0.35); }
+.btn-outline {
+  background:transparent; color:var(--text); padding:15px 36px;
+  border-radius:100px; border:1px solid var(--border);
+  font-size:15px; text-decoration:none; transition:all 0.2s;
+}
+.btn-outline:hover { border-color:rgba(255,255,255,0.25); }
+
+/* STATS BAR */
+.stats-bar {
+  display:flex; justify-content:center; gap:0;
+  border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  animation:fadeUp 0.6s 0.4s ease both;
+}
+.stat {
+  flex:1; max-width:220px; text-align:center;
+  padding:36px 20px; border-right:1px solid var(--border);
+}
+.stat:last-child { border-right:none; }
+.stat-n { font-family:var(--font); font-size:40px; font-weight:800; color:var(--accent); letter-spacing:-1px; }
+.stat-l { color:var(--muted); font-size:13px; margin-top:4px; letter-spacing:0.3px; }
+
+/* FEATURES */
+.section { max-width:1100px; margin:0 auto; padding:100px 64px; }
+.label { font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:var(--accent); font-weight:600; margin-bottom:14px; }
+.sec-title {
+  font-family:var(--font); font-size:clamp(28px,4vw,46px);
+  font-weight:800; letter-spacing:-1.5px; line-height:1.1; margin-bottom:60px;
+}
+
+.feat-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+  background:var(--border); border:1px solid var(--border);
+  border-radius:20px; overflow:hidden;
+}
+.feat-card {
+  background:var(--card); padding:40px 32px;
+  transition:background 0.3s;
+}
+.feat-card:hover { background:#141428; }
+.feat-icon {
+  width:48px; height:48px; border-radius:12px;
+  background:rgba(124,110,249,0.1); border:1px solid rgba(124,110,249,0.2);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; margin-bottom:20px;
+}
+.feat-card h3 { font-family:var(--font); font-size:17px; font-weight:700; margin-bottom:10px; }
+.feat-card p { color:var(--muted); font-size:14px; line-height:1.8; }
+
+/* HOW */
+.how-section {
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.steps { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:60px; position:relative; }
+.steps::after {
+  content:''; position:absolute;
+  top:20px; left:12%; right:12%; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(124,110,249,0.5),transparent);
+}
+.step { text-align:center; padding:16px 20px; }
+.step-n {
+  width:40px; height:40px; margin:0 auto 20px;
+  border-radius:50%; border:2px solid var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font); font-weight:800; font-size:15px;
+  color:var(--accent); background:var(--surface); position:relative; z-index:1;
+}
+.step h3 { font-family:var(--font); font-size:15px; font-weight:700; margin-bottom:8px; }
+.step p { color:var(--muted); font-size:13px; line-height:1.7; }
+
+/* CTA */
+.cta-wrap {
+  text-align:center; padding:120px 40px;
+  position:relative; overflow:hidden;
+}
+.cta-glow {
+  position:absolute; width:500px; height:500px; border-radius:50%;
+  background:radial-gradient(circle,rgba(86,207,178,0.08) 0%,transparent 65%);
+  top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none;
+}
+.cta-wrap h2 {
+  font-family:var(--font); font-size:clamp(32px,5vw,60px);
+  font-weight:800; letter-spacing:-2px; margin-bottom:18px; position:relative;
+}
+.cta-wrap p { color:var(--muted); font-size:17px; margin-bottom:44px; position:relative; }
+
+/* FOOTER */
+footer {
+  border-top:1px solid var(--border);
+  padding:28px 64px;
+  display:flex; justify-content:space-between; align-items:center;
+  color:var(--muted); font-size:13px;
+}
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+@media(max-width:768px){
+  nav{padding:16px 20px;}
+  .hero{padding:100px 20px 60px;}
+  .stats-bar{flex-wrap:wrap;}
+  .stat{flex:1 1 50%; border-right:none; border-bottom:1px solid var(--border);}
+  .section{padding:60px 20px;}
+  .feat-grid{grid-template-columns:1fr;}
+  .steps{grid-template-columns:repeat(2,1fr);}
+  .steps::after{display:none;}
+  footer{flex-direction:column;gap:8px;text-align:center;padding:20px;}
+}
+</style>
 </head>
-
 <body>
-    
 
-<!-- HERO SECTION -->
+<nav>
+  <div class="nav-logo">Career<em>AI</em></div>
+  <a href="signup.html" class="nav-cta">Get Started →</a>
+</nav>
+
 <section class="hero">
-
-    <div class="hero-text">
-        <h1>AI Career Guide</h1>
-        <p>Empowering your future with intelligent career insights powered by AI.</p>
-        <a href="signup.html" class="btn">Get Started</a>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-pill"><span></span> Powered by AI</div>
+    <h1>Find Your<br><span class="grad">Perfect Career</span><br>with AI</h1>
+    <p class="hero-desc">Enter your skills, interests and CGPA. Get a personalized career roadmap with salary insights — built for Indian students.</p>
+    <div class="hero-btns">
+      <a href="signup.html" class="btn-main">Build My Roadmap</a>
+      <a href="#how" class="btn-outline">See How It Works</a>
     </div>
-
+  </div>
 </section>
 
-<!-- FEATURES SECTION -->
-<section class="features">
-    <h2>Powerful Features</h2>
+<div class="stats-bar">
+  <div class="stat"><div class="stat-n">50+</div><div class="stat-l">Career Paths</div></div>
+  <div class="stat"><div class="stat-n">AI</div><div class="stat-l">Powered Analysis</div></div>
+  <div class="stat"><div class="stat-n">100%</div><div class="stat-l">India Focused</div></div>
+  <div class="stat"><div class="stat-n">Free</div><div class="stat-l">No Cost</div></div>
+</div>
 
-    <div class="feature-container">
-        <div class="feature-card">
-            <h3>AI Recommendations</h3>
-            <p>Smart career suggestions powered by AI.</p>
-        </div>
-
-        <div class="feature-card">
-            <h3>Skill Gap Analysis</h3>
-            <p>Identify skills you need to improve.</p>
-        </div>
-
-        <div class="feature-card">
-            <h3>Personal Roadmap</h3>
-            <p>Step-by-step career growth plan.</p>
-        </div>
-    </div>
+<section class="section" id="features">
+  <div class="label">Features</div>
+  <div class="sec-title">Everything You Need to<br>Plan Your Future</div>
+  <div class="feat-grid">
+    <div class="feat-card"><div class="feat-icon">🧠</div><h3>AI Analysis</h3><p>AI processes your full profile — skills, CGPA, interests — to generate a career recommendation just for you.</p></div>
+    <div class="feat-card"><div class="feat-icon">🗺️</div><h3>Step-by-Step Roadmap</h3><p>Get a clear action plan: what to learn, which certifications matter, and how to land your first job.</p></div>
+    <div class="feat-card"><div class="feat-icon">💰</div><h3>Salary Insights</h3><p>Real salary ranges for the Indian market — entry level to senior — so you know what to expect.</p></div>
+    <div class="feat-card"><div class="feat-icon">🏢</div><h3>Top Companies</h3><p>Discover which companies in India are actively hiring for your recommended career path.</p></div>
+    <div class="feat-card"><div class="feat-icon">📊</div><h3>Skill Gap Detection</h3><p>AI identifies exactly which skills you still need to acquire to become completely job-ready.</p></div>
+    <div class="feat-card"><div class="feat-icon">📁</div><h3>History Saved</h3><p>Every result is saved to your account. Come back anytime to explore different career paths.</p></div>
+  </div>
 </section>
 
-<!-- HOW IT WORKS SECTION -->
-<section class="how">
-    <h2>How It Works</h2>
-
+<section class="how-section" id="how">
+  <div class="section" style="padding-top:80px;padding-bottom:80px;">
+    <div class="label">Process</div>
+    <div class="sec-title">How It Works</div>
     <div class="steps">
-        <div class="step">
-            <h3>Sign Up</h3>
-            <p>Create your account.</p>
-        </div>
-
-        <div class="step">
-            <h3>Enter Skills</h3>
-            <p>Add your interests and abilities.</p>
-        </div>
-
-        <div class="step">
-            <h3>AI Analysis</h3>
-            <p>System analyzes your profile.</p>
-        </div>
-
-        <div class="step">
-            <h3>Get Results</h3>
-            <p>Receive your personalized roadmap.</p>
-        </div>
+      <div class="step"><div class="step-n">1</div><h3>Create Account</h3><p>Sign up with your name and email in 30 seconds.</p></div>
+      <div class="step"><div class="step-n">2</div><h3>Enter Your Profile</h3><p>Add your skills, interests, CGPA and preferred field.</p></div>
+      <div class="step"><div class="step-n">3</div><h3>AI Analyzes</h3><p>AI processes your data and generates career insights.</p></div>
+      <div class="step"><div class="step-n">4</div><h3>Get Your Roadmap</h3><p>View your personalized path with salary data and companies.</p></div>
     </div>
+  </div>
 </section>
 
-<script src="script.js"></script>
+<div class="cta-wrap">
+  <div class="cta-glow"></div>
+  <h2>Ready to Discover<br>Your Career Path?</h2>
+  <p>Join students who have already found their direction with AI guidance.</p>
+  <a href="signup.html" class="btn-main" style="font-size:16px;padding:16px 44px;">Start for Free →</a>
+</div>
+
+<footer>
+  <div class="nav-logo" style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;">Career<span style="color:#7c6ef9">AI</span></div>
+  <div>AI Career Guide System &nbsp;·&nbsp; College Project &nbsp;·&nbsp; 2025</div>
+</footer>
+
 </body>
 </html>

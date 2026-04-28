@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My History — AI Career Guide</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🎯</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06060f; --surface:#0e0e1c; --card:#13131f;
+  --border:rgba(255,255,255,0.08); --accent:#7c6ef9; --green:#56cfb2;
+  --text:#f0f0f4; --muted:#888899;
+  --font:'Nunito',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:15px;}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 48px;border-bottom:1px solid var(--border);background:rgba(6,6,15,0.92);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10;}
+.logo{font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.logo em{font-style:normal;color:var(--accent);}
+.user-row{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted);}
+.user-row strong{color:var(--text);font-weight:700;}
+.logout-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-family:var(--font);transition:all 0.2s;}
+.logout-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.2);}
+
+.page{max-width:800px;margin:0 auto;padding:52px 32px 80px;}
+
+.page-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:36px;}
+.page-title{font-size:34px;font-weight:800;letter-spacing:-1px;line-height:1.15;}
+.page-title span{color:var(--accent);}
+.page-sub{color:var(--muted);font-size:14px;margin-top:6px;}
+.new-btn{background:var(--accent);color:#fff;border:none;padding:12px 26px;border-radius:100px;font-family:var(--font);font-weight:800;font-size:14px;cursor:pointer;text-decoration:none;transition:all 0.2s;white-space:nowrap;}
+.new-btn:hover{opacity:0.88;transform:translateY(-1px);}
+
+/* LOADING */
+#loadState{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;gap:16px;}
+.spinner{width:36px;height:36px;border:3px solid rgba(124,110,249,0.15);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-title{font-size:15px;font-weight:700;color:var(--muted);}
+
+/* EMPTY */
+#emptyState{display:none;text-align:center;padding:80px 24px;}
+.empty-ico{font-size:48px;margin-bottom:16px;}
+#emptyState h2{font-size:22px;font-weight:800;margin-bottom:10px;}
+#emptyState p{color:var(--muted);font-size:14px;line-height:1.8;max-width:360px;margin:0 auto 28px;}
+
+/* HISTORY LIST */
+#historyList{display:none;display:flex;flex-direction:column;gap:16px;}
+
+.h-card{
+  background:var(--card);border:1px solid var(--border);border-radius:18px;
+  padding:28px 32px;cursor:pointer;transition:all 0.25s;
+  animation:up 0.4s ease both;position:relative;overflow:hidden;
+}
+.h-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(124,110,249,0.05) 0%,transparent 60%);pointer-events:none;}
+.h-card:hover{border-color:rgba(124,110,249,0.3);transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+
+.h-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px;}
+.h-career-title{font-size:20px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;line-height:1.2;}
+.h-date{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap;margin-top:4px;}
+
+.h-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.h-tag{padding:4px 12px;border-radius:100px;background:rgba(255,255,255,0.04);border:1px solid var(--border);font-size:12px;font-weight:600;color:var(--muted);}
+.h-tag span{color:var(--text);}
+
+.h-why{font-size:13px;color:#9090a8;line-height:1.7;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+.h-footer{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid var(--border);}
+.h-view-btn{font-size:13px;font-weight:700;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--font);padding:0;transition:opacity 0.2s;}
+.h-view-btn:hover{opacity:0.7;}
+.h-delete-btn{font-size:12px;font-weight:600;color:var(--muted);background:none;border:none;cursor:pointer;font-family:var(--font);padding:0;transition:color 0.2s;}
+.h-delete-btn:hover{color:#f87171;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);z-index:100;align-items:center;justify-content:center;padding:24px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:20px;width:100%;max-width:680px;max-height:85vh;overflow-y:auto;animation:up 0.3s ease;}
+.modal-header{padding:28px 32px 0;display:flex;justify-content:space-between;align-items:flex-start;}
+.modal-title{font-size:24px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;}
+.modal-close{background:transparent;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;}
+.modal-close:hover{color:var(--text);border-color:rgba(255,255,255,0.2);}
+.modal-body{padding:24px 32px 32px;}
+.modal-why{color:var(--muted);font-size:14px;line-height:1.8;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+.modal-section{margin-bottom:20px;}
+.modal-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.modal-list{list-style:none;}
+.modal-list li{padding:7px 0;border-bottom:1px solid var(--border);color:#d0d0e0;font-size:14px;font-weight:600;display:flex;align-items:flex-start;gap:10px;line-height:1.6;}
+.modal-list li:last-child{border-bottom:none;}
+.modal-list li::before{content:"→";color:var(--accent);font-weight:800;flex-shrink:0;}
+.modal-salary{display:flex;gap:10px;flex-wrap:wrap;}
+.sal-box{flex:1;min-width:110px;background:rgba(86,207,178,0.07);border:1px solid rgba(86,207,178,0.2);border-radius:12px;padding:12px 14px;}
+.sal-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.sal-val{font-size:17px;font-weight:800;color:var(--green);}
+.modal-companies{display:flex;flex-wrap:wrap;gap:8px;}
+.co-pill{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:100px;padding:6px 15px;font-size:13px;font-weight:600;color:#d0d0e0;}
+
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:600px){
+  .topbar{padding:14px 18px;}
+  .page{padding:28px 16px 60px;}
+  .page-header{flex-direction:column;align-items:flex-start;gap:16px;}
+  .h-card{padding:20px;}
+  .modal-header{padding:20px 20px 0;}
+  .modal-body{padding:20px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Career<em>AI</em></div>
+  <div class="user-row">
+    Hello, <strong id="uname">Student</strong>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="page-header">
+    <div>
+      <div class="page-title">My Career <span>History</span></div>
+      <div class="page-sub">All your past AI-generated career paths</div>
+    </div>
+    <a href="skills.html" class="new-btn">+ Generate New</a>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loadState">
+    <div class="spinner"></div>
+    <div class="load-title">Loading your history...</div>
+  </div>
+
+  <!-- EMPTY -->
+  <div id="emptyState">
+    <div class="empty-ico">📋</div>
+    <h2>No history yet</h2>
+    <p>You haven't generated any career paths yet. Try building your first profile!</p>
+    <a href="skills.html" class="new-btn">Build My Profile →</a>
+  </div>
+
+  <!-- LIST -->
+  <div id="historyList"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="mTitle">—</div>
+      <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-why" id="mWhy"></div>
+      <div class="modal-section">
+        <div class="modal-label">Skills to Learn</div>
+        <ul class="modal-list" id="mSkills"></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-label">Your Roadmap</div>
+        <ul class="modal-list" id="mRoadmap"></ul>
+      </div>
+      <div class="modal-section">
+        <div class="modal-label">Salary in India</div>
+        <div class="modal-salary" id="mSalary"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-label">Top Companies</div>
+        <div class="modal-companies" id="mCompanies"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = "http://localhost:5000/api";
+const u = localStorage.getItem("user");
+if(!u) window.location.href = "signup.html";
+const user = JSON.parse(u || "{}");
+document.getElementById("uname").textContent = (user.name || "Student").split(" ")[0];
+function logout(){ localStorage.clear(); window.location.href = "signup.html"; }
+
+// ── Parse result text ──────────────────────────────────────────
+function parse(text){
+  const r = {title:"",why:"",skills:[],roadmap:[],salary:"",companies:[]};
+  let sec = "";
+  for(const raw of text.split("\n")){
+    const l = raw.trim(); if(!l) continue;
+    if(l.startsWith("CAREER TITLE:"))        { r.title = l.replace("CAREER TITLE:","").trim(); }
+    else if(l.startsWith("WHY THIS FITS"))   { sec="why"; r.why = l.replace(/^WHY THIS FITS YOU:/,"").trim(); }
+    else if(l.startsWith("TOP SKILLS"))      { sec="skills"; }
+    else if(l.startsWith("ROADMAP:"))        { sec="roadmap"; }
+    else if(l.startsWith("SALARY IN INDIA:")){ sec="salary"; r.salary = l.replace("SALARY IN INDIA:","").trim(); }
+    else if(l.startsWith("TOP COMPANIES:"))  {
+      sec="companies";
+      const v = l.replace("TOP COMPANIES:","").trim();
+      if(v) r.companies = v.split(",").map(c=>c.trim()).filter(Boolean);
+    }
+    else if(/^[•\-*]/.test(l)){
+      const v = l.replace(/^[•\-*]\s*/,"").trim();
+      if(sec==="skills")    r.skills.push(v);
+      if(sec==="roadmap")   r.roadmap.push(v);
+      if(sec==="companies") r.companies.push(v);
+    }
+    else if(sec==="why" && r.why) r.why += " " + l;
+  }
+  return r;
+}
+
+function formatDate(iso){
+  return new Date(iso).toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric"});
+}
+
+// ── Render history cards ───────────────────────────────────────
+function renderHistory(history){
+  document.getElementById("loadState").style.display = "none";
+
+  if(!history.length){
+    document.getElementById("emptyState").style.display = "block";
+    return;
+  }
+
+  const list = document.getElementById("historyList");
+  list.style.display = "flex";
+  list.innerHTML = "";
+
+  history.forEach((item, i) => {
+    const p = parse(item.result || "");
+    const inp = item.input || {};
+
+    const card = document.createElement("div");
+    card.className = "h-card";
+    card.style.animationDelay = `${i * 0.07}s`;
+
+    card.innerHTML = `
+      <div class="h-card-top">
+        <div>
+          <div class="h-career-title">${p.title || "Career Path"}</div>
+        </div>
+        <div class="h-date">${formatDate(item.createdAt)}</div>
+      </div>
+      <div class="h-tags">
+        ${inp.field    ? `<div class="h-tag">Field: <span>${inp.field}</span></div>` : ""}
+        ${inp.cgpa     ? `<div class="h-tag">CGPA: <span>${inp.cgpa}</span></div>` : ""}
+        ${inp.interest ? `<div class="h-tag">Interest: <span>${inp.interest.split(",")[0]}</span></div>` : ""}
+      </div>
+      ${p.why ? `<div class="h-why">${p.why}</div>` : ""}
+      <div class="h-footer">
+        <button class="h-view-btn" onclick="openModal(${i})">View Full Result →</button>
+        <button class="h-delete-btn" onclick="deleteItem('${item.id}', event)">✕ Delete</button>
+      </div>
+    `;
+
+    list.appendChild(card);
+  });
+}
+
+// ── Modal ──────────────────────────────────────────────────────
+let allHistory = [];
+
+function openModal(i){
+  const item = allHistory[i];
+  const p = parse(item.result || "");
+
+  document.getElementById("mTitle").textContent = p.title || "Career Path";
+  document.getElementById("mWhy").textContent   = p.why   || "No description available.";
+
+  document.getElementById("mSkills").innerHTML = p.skills.length
+    ? p.skills.map(s=>`<li>${s}</li>`).join("")
+    : `<li>No data</li>`;
+
+  document.getElementById("mRoadmap").innerHTML = p.roadmap.length
+    ? p.roadmap.map(s=>`<li>${s}</li>`).join("")
+    : `<li>No data</li>`;
+
+  const salEl = document.getElementById("mSalary");
+  salEl.innerHTML = "";
+  const tiers = [
+    {l:"Entry Level", re:/entry[^:]*:\s*([^|]+)/i},
+    {l:"Mid Level",   re:/mid[^:]*:\s*([^|]+)/i},
+    {l:"Senior",      re:/senior[^:]*:\s*([^\n|]+)/i}
+  ];
+  let found = false;
+  tiers.forEach(t => {
+    const m = p.salary.match(t.re);
+    if(m){ found=true; salEl.innerHTML += `<div class="sal-box"><div class="sal-lbl">${t.l}</div><div class="sal-val">${m[1].trim()}</div></div>`; }
+  });
+  if(!found) salEl.innerHTML = `<p style="color:var(--muted);font-size:14px">${p.salary || "—"}</p>`;
+
+  document.getElementById("mCompanies").innerHTML = p.companies.length
+    ? p.companies.map(c=>`<span class="co-pill">${c}</span>`).join("")
+    : `<span style="color:var(--muted);font-size:14px">No data</span>`;
+
+  document.getElementById("modalOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModalBtn(){
+  document.getElementById("modalOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function closeModal(e){
+  if(e.target === document.getElementById("modalOverlay")) closeModalBtn();
+}
+
+// ── Delete ─────────────────────────────────────────────────────
+function deleteItem(id, e){
+  e.stopPropagation();
+  allHistory = allHistory.filter(h => h.id !== id);
+  renderHistory(allHistory);
+}
+
+// ── Load history from backend ──────────────────────────────────
+async function loadHistory(){
+  try {
+    const res  = await fetch(`${API}/history/${user.id}`);
+    const data = await res.json();
+    if(!data.success) throw new Error("Failed to load");
+    allHistory = data.history || [];
+    renderHistory(allHistory);
+  } catch(err){
+    document.getElementById("loadState").style.display = "none";
+    document.getElementById("emptyState").style.display = "block";
+    console.error("History load error:", err);
+  }
+}
+
+loadHistory();
+</script>
+</body>
+</html>

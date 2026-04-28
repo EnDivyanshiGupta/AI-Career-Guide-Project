@@ -3,143 +3,168 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Your Profile — AI Career Guide</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🎯</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06060f; --surface:#0e0e1c; --card:#13131f;
+  --border:rgba(255,255,255,0.08); --accent:#7c6ef9;
+  --text:#f0f0f4; --muted:#888899;
+  --font:'Nunito',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:15px;line-height:1.5;}
 
-<title>Enter Details - AI Career Guide</title>
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 48px;border-bottom:1px solid var(--border);background:rgba(6,6,15,0.92);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10;}
+.logo{font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.logo em{font-style:normal;color:var(--accent);}
+.user-row{display:flex;align-items:center;gap:12px;font-size:14px;color:var(--muted);}
+.user-row strong{color:var(--text);font-weight:700;}
+.logout-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-family:var(--font);transition:all 0.2s;}
+.logout-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.2);}
 
-<link rel="stylesheet" href="style.css">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"></noscript>
+.page{max-width:700px;margin:0 auto;padding:52px 32px;}
+.step-badge{display:inline-block;background:rgba(124,110,249,0.12);border:1px solid rgba(124,110,249,0.25);color:#a89cf7;padding:4px 14px;border-radius:100px;font-size:12px;font-weight:700;letter-spacing:0.5px;margin-bottom:16px;}
+.page-title{font-size:34px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;line-height:1.15;}
+.page-sub{color:var(--muted);font-size:15px;line-height:1.7;margin-bottom:36px;}
 
+.form-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:36px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px;}
+.field{margin-bottom:20px;}
+.field-label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:7px;letter-spacing:0.8px;text-transform:uppercase;}
+input,textarea{width:100%;padding:12px 15px;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:var(--font);font-size:15px;transition:border-color 0.2s;outline:none;resize:none;}
+input:focus,textarea:focus{border-color:var(--accent);}
+input::placeholder,textarea::placeholder{color:#44445a;}
+textarea{height:84px;}
+
+.section-label{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;letter-spacing:0.8px;text-transform:uppercase;}
+.chips-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;}
+.chip{padding:8px 16px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-family:var(--font);font-size:13px;font-weight:600;transition:all 0.2s;}
+.chip:hover{border-color:rgba(124,110,249,0.5);color:var(--text);}
+.chip.on{background:rgba(124,110,249,0.14);border-color:var(--accent);color:#a89cf7;}
+.chip-input{padding:8px 16px;border-radius:100px;border:1.5px dashed rgba(255,255,255,0.12);background:transparent;color:var(--text);font-size:13px;font-family:var(--font);width:110px;outline:none;transition:all 0.2s;}
+.chip-input:focus{border-color:var(--accent);border-style:solid;}
+.chip-input::placeholder{color:#44445a;}
+
+.form-footer{display:flex;justify-content:space-between;align-items:center;padding-top:22px;border-top:1px solid var(--border);margin-top:4px;}
+.clear-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:14px;font-family:var(--font);font-weight:600;transition:color 0.2s;}
+.clear-btn:hover{color:var(--text);}
+.gen-btn{background:var(--accent);color:#fff;border:none;padding:13px 32px;border-radius:100px;font-family:var(--font);font-weight:800;font-size:15px;cursor:pointer;transition:all 0.2s;letter-spacing:0.2px;}
+.gen-btn:hover{opacity:0.88;transform:translateY(-1px);}
+.gen-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+
+@media(max-width:600px){
+  .topbar{padding:14px 18px;}
+  .page{padding:32px 16px;}
+  .form-card{padding:22px;}
+  .row2{grid-template-columns:1fr;}
+}
+</style>
 </head>
-
 <body>
-  <header class="top-bar">
-    <h1>AI Career Guide System</h1>
-</header>
 
-<section class="skill-container">
-
-<div class="skill-box">
-
-<h2>Enter Your Details</h2>
-
-<form id="skillForm">
-
-<label>Skills</label><br>
-<textarea
-id="skills"
-placeholder="Example: Python, HTML, Communication"
-required
-></textarea>
-
-<br><br>
-
-<label>Interest</label><br>
-<input
-type="text"
-id="interest"
-placeholder="Example: AI, Web, Cloud"
-required
->
-
-<br><br>
-
-<label>CGPA</label><br>
-<input
-type="number"
-id="cgpa"
-step="0.1"
-placeholder="Example: 8.2"
-required
->
-
-<br><br>
-
-<label>Preferred Field</label><br>
-<input
-type="text"
-id="field"
-placeholder="Example: IT, Design, Teaching"
-required
->
-
-<br><br>
-
-<button type="submit" class="btn">
-Analyze Career
-</button>
-
-</form>
-
+<div class="topbar">
+  <div class="logo">Career<em>AI</em></div>
+  <div class="user-row">
+    Hello, <strong id="uname">Student</strong>
+    <a href="history.html" style="color:var(--muted);font-size:13px;text-decoration:none;font-weight:600;">My History</a>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
 </div>
 
-</section>
+<div class="page">
+  <div class="step-badge">Step 1 of 2</div>
+  <div class="page-title">Build Your Career Profile</div>
+  <p class="page-sub">Fill in your details below. The more you share, the better your AI career recommendation will be.</p>
 
+  <div class="form-card">
+    <form id="pForm">
+      <div class="row2">
+        <div>
+          <label class="field-label">Preferred Field</label>
+          <input type="text" id="field" placeholder="e.g. Artificial Intelligence">
+        </div>
+        <div>
+          <label class="field-label">CGPA</label>
+          <input type="number" id="cgpa" step="0.1" min="0" max="10" placeholder="e.g. 8.5">
+        </div>
+      </div>
 
+      <div class="field">
+        <label class="field-label">Technical Skills</label>
+        <textarea id="skills" placeholder="e.g. Python, React, SQL, Machine Learning, Data Analysis..."></textarea>
+      </div>
 
-<script src="ai.js"></script>
+      <div class="section-label">Interests — select all that apply</div>
+      <div class="chips-wrap" id="chipsWrap">
+        <button type="button" class="chip" data-v="machine learning">Machine Learning</button>
+        <button type="button" class="chip" data-v="web development">Web Development</button>
+        <button type="button" class="chip" data-v="ui/ux design">UI/UX Design</button>
+        <button type="button" class="chip" data-v="cybersecurity">Cybersecurity</button>
+        <button type="button" class="chip" data-v="cloud computing">Cloud Computing</button>
+        <button type="button" class="chip" data-v="data science">Data Science</button>
+        <button type="button" class="chip" data-v="mobile development">Mobile Dev</button>
+        <button type="button" class="chip" data-v="blockchain">Blockchain</button>
+        <input type="text" class="chip-input" id="custom" placeholder="+ Add more">
+      </div>
+      <input type="hidden" id="intHidden">
+
+      <div class="form-footer">
+        <button type="button" class="clear-btn" onclick="clearAll()">↺ Clear all</button>
+        <button type="submit" class="gen-btn" id="genBtn">Generate My Career →</button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script>
+const u = localStorage.getItem("user");
+if(!u) window.location.href = "signup.html";
+const user = JSON.parse(u || "{}");
+document.getElementById("uname").textContent = (user.name || "Student").split(" ")[0];
+function logout(){ localStorage.clear(); window.location.href = "signup.html"; }
 
-document.getElementById("skillForm").addEventListener("submit", async function(e) {
-
-    e.preventDefault();
-
-    const submitBtn = document.querySelector("#skillForm button");
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Analyzing...";
-
-    let skills =
-    document.getElementById("skills").value.toLowerCase();
-
-    let interest =
-    document.getElementById("interest").value.toLowerCase();
-
-    let career = "Software Developer";
-
-    try {
-        career = await getCareer(skills + " " + interest);
-    } catch (error) {
-        console.error("AI API failed, using default logic", error);
-        // fallback to original logic
-        if (skills.includes("python") || interest.includes("ai")) {
-            career = "Data Scientist";
-        }
-        else if (skills.includes("html") || interest.includes("web")) {
-            career = "Web Developer";
-        }
-        else if (skills.includes("cloud")) {
-            career = "Cloud Engineer";
-        }
-        else if (interest.includes("design")) {
-            career = "UI Designer";
-        }
-        else if (interest.includes("teaching")) {
-            career = "Teacher";
-        }
-    }
-
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Analyze Career";
-
-localStorage.setItem("careerResult", career);
-localStorage.setItem("skills", skills);
-localStorage.setItem("interest", interest);
-
-let cgpa =
-document.getElementById("cgpa").value;
-
-let field =
-document.getElementById("field").value;
-
-localStorage.setItem("cgpa", cgpa);
-localStorage.setItem("field", field);
-
-    window.location.href = "result.html";
-
+const sel = new Set();
+document.querySelectorAll(".chip").forEach(c => {
+  c.addEventListener("click", () => {
+    c.classList.toggle("on");
+    const v = c.dataset.v;
+    sel.has(v) ? sel.delete(v) : sel.add(v);
+    upd();
+  });
 });
-
+document.getElementById("custom").addEventListener("keydown", function(e) {
+  if(e.key === "Enter" && this.value.trim()) {
+    e.preventDefault();
+    const v = this.value.trim().toLowerCase();
+    const c = document.createElement("button");
+    c.type = "button"; c.className = "chip on";
+    c.dataset.v = v; c.textContent = this.value.trim();
+    c.addEventListener("click", () => { c.remove(); sel.delete(v); upd(); });
+    sel.add(v);
+    document.getElementById("chipsWrap").insertBefore(c, this);
+    this.value = ""; upd();
+  }
+});
+function upd(){ document.getElementById("intHidden").value = Array.from(sel).join(", "); }
+function clearAll(){
+  document.getElementById("pForm").reset();
+  sel.clear();
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("on"));
+  upd();
+}
+document.getElementById("pForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const btn = document.getElementById("genBtn");
+  btn.disabled = true; btn.textContent = "Analyzing...";
+  localStorage.setItem("skills",   document.getElementById("skills").value);
+  localStorage.setItem("interest", document.getElementById("intHidden").value);
+  localStorage.setItem("cgpa",     document.getElementById("cgpa").value);
+  localStorage.setItem("field",    document.getElementById("field").value);
+  sessionStorage.removeItem("careerResult");
+  window.location.href = "result.html";
+});
 </script>
-
 </body>
 </html>

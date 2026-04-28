@@ -1,30 +1,35 @@
-const API_KEY = "YOUR_API_KEY_HERE";
+async function getCareer() {
+    const skills = document.getElementById("skills").value;
+    const interest = document.getElementById("interest").value;
+    const cgpa = document.getElementById("cgpa").value;
+    const field = document.getElementById("field").value;
 
-async function getCareer(skills) {
-
-    const response = await fetch(
-        "https://api.openai.com/v1/chat/completions",
-        {
+    try {
+        const response = await fetch("http://localhost:5000/api/career", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + API_KEY
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo",
-                messages: [
-                    {
-                        role: "user",
-                        content: "Suggest one career for skills: " + skills + ". Give career name and short explanation."
-                    }
-                ]
+                skills,
+                interest,
+                cgpa,
+                field
             })
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+
+        if (data.success) {
+            return data.result;
+        } else {
+            return "Error: " + data.error;
         }
-    );
 
-    const data = await response.json();
-
-    console.log(data);
-
-    return data.choices[0].message.content;
+    } catch (error) {
+        console.error(error);
+        return "Something went wrong";
+    }
 }

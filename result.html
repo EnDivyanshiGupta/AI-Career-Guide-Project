@@ -1,66 +1,267 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Career Path — AI Career Guide</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🎯</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06060f; --surface:#0e0e1c; --card:#13131f;
+  --border:rgba(255,255,255,0.08); --accent:#7c6ef9; --green:#56cfb2;
+  --text:#f0f0f4; --muted:#888899;
+  --font:'Nunito',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:15px;}
 
-<title>Career Result</title>
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 48px;border-bottom:1px solid var(--border);background:rgba(6,6,15,0.92);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10;}
+.logo{font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.logo em{font-style:normal;color:var(--accent);}
+.back-link{background:transparent;border:1px solid var(--border);color:var(--muted);padding:7px 16px;border-radius:8px;font-size:13px;text-decoration:none;font-family:var(--font);transition:all 0.2s;display:inline-block;}
+.back-link:hover{color:var(--text);border-color:rgba(255,255,255,0.2);}
 
-<link rel="stylesheet" href="style.css">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap"></noscript>
+/* LOADING */
+#loadState{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 65px);gap:16px;text-align:center;padding:40px;}
+.spinner{width:42px;height:42px;border:3px solid rgba(124,110,249,0.15);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-title{font-size:17px;font-weight:700;color:var(--muted);}
+.load-sub{color:#44445a;font-size:14px;}
 
+/* ERROR */
+#errState{display:none;text-align:center;padding:80px 24px;}
+#errState h2{font-size:22px;font-weight:800;color:#f87171;margin-bottom:10px;}
+#errState p{color:var(--muted);font-size:14px;line-height:1.8;max-width:460px;margin:0 auto 28px;}
+
+/* RESULT */
+#resultState{display:none;}
+.page{max-width:800px;margin:0 auto;padding:52px 32px 80px;}
+
+/* CAREER HERO */
+.career-hero{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:48px 40px;text-align:center;margin-bottom:18px;
+  position:relative;overflow:hidden;
+  animation:up 0.5s ease both;
+}
+.career-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,110,249,0.09) 0%,transparent 55%);}
+.hero-tag{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;position:relative;}
+.hero-title{font-size:clamp(28px,5vw,48px);font-weight:800;letter-spacing:-1px;line-height:1.15;margin-bottom:16px;color:var(--accent);position:relative;}
+.hero-why{color:var(--muted);font-size:15px;line-height:1.8;max-width:540px;margin:0 auto;position:relative;}
+
+/* INFO CARDS GRID */
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.icard{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:26px;animation:up 0.5s ease both;}
+.icard.full{grid-column:1/-1;}
+.icard:nth-child(1){animation-delay:0.1s}
+.icard:nth-child(2){animation-delay:0.15s}
+.icard:nth-child(3){animation-delay:0.2s}
+.icard:nth-child(4){animation-delay:0.25s}
+
+.card-top{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.card-ico{width:34px;height:34px;background:rgba(124,110,249,0.1);border:1px solid rgba(124,110,249,0.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.card-name{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+
+.item-list{list-style:none;}
+.item-list li{padding:8px 0;border-bottom:1px solid var(--border);color:#d0d0e0;font-size:14px;font-weight:600;display:flex;align-items:flex-start;gap:10px;line-height:1.6;}
+.item-list li:last-child{border-bottom:none;}
+.item-list li::before{content:"→";color:var(--accent);font-weight:800;flex-shrink:0;margin-top:1px;}
+
+.salary-boxes{display:flex;gap:10px;flex-wrap:wrap;}
+.sal-box{flex:1;min-width:120px;background:rgba(86,207,178,0.07);border:1px solid rgba(86,207,178,0.2);border-radius:12px;padding:14px 16px;}
+.sal-lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.sal-val{font-size:19px;font-weight:800;color:var(--green);}
+
+.co-wrap{display:flex;flex-wrap:wrap;gap:8px;}
+.co-pill{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:100px;padding:6px 15px;font-size:13px;font-weight:600;color:#d0d0e0;}
+
+.result-btns{display:flex;gap:12px;justify-content:center;margin-top:40px;animation:up 0.5s 0.4s ease both;}
+.btn-solid{padding:13px 32px;border-radius:100px;background:var(--accent);color:#fff;border:none;font-family:var(--font);font-weight:800;font-size:15px;cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-solid:hover{opacity:0.88;transform:translateY(-1px);}
+.btn-hollow{padding:13px 32px;border-radius:100px;background:transparent;color:var(--text);border:1px solid var(--border);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+.btn-hollow:hover{border-color:rgba(255,255,255,0.25);}
+
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:600px){
+  .topbar{padding:14px 18px;}
+  .page{padding:28px 16px 60px;}
+  .career-hero{padding:32px 20px;}
+  .cards-grid{grid-template-columns:1fr;}
+  .icard.full{grid-column:auto;}
+  .salary-boxes{flex-direction:column;}
+  .result-btns{flex-direction:column;align-items:center;}
+}
+</style>
 </head>
-
 <body>
-    <header class="top-bar">
-    <h1>AI Career Guide System</h1>
-</header>
 
-<section class="result-container">
-
-<div class="result-box">
-
-<h1>Career Recommendation</h1>
-
-<h2 id="career"></h2>
-
-<p id="reason"></p>
-
-<br>
-
-<button onclick="goBack()" class="btn">
-Try Again
-</button>
-
+<div class="topbar">
+  <div class="logo">Career<em>AI</em></div>
+  <a href="skills.html" class="back-link">← Try Again</a>
 </div>
 
-</section>
+<!-- LOADING -->
+<div id="loadState">
+  <div class="spinner"></div>
+  <div class="load-title">Analyzing your profile...</div>
+  <div class="load-sub">AI is generating your personalized career path</div>
+</div>
 
+<!-- ERROR -->
+<div id="errState">
+  <h2>Something went wrong</h2>
+  <p id="errMsg">Could not generate your career path.</p>
+  <a href="skills.html" class="back-link">← Go Back</a>
+</div>
+
+<!-- RESULT -->
+<div id="resultState">
+  <div class="page">
+
+    <div class="career-hero">
+      <div class="hero-tag">✦ Your AI-Generated Career Path</div>
+      <div class="hero-title" id="cTitle">—</div>
+      <div class="hero-why" id="cWhy"></div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="icard">
+        <div class="card-top"><div class="card-ico">📚</div><div class="card-name">Skills to Learn</div></div>
+        <ul class="item-list" id="skillsList"></ul>
+      </div>
+      <div class="icard">
+        <div class="card-top"><div class="card-ico">🗺️</div><div class="card-name">Your Roadmap</div></div>
+        <ul class="item-list" id="roadList"></ul>
+      </div>
+      <div class="icard full">
+        <div class="card-top"><div class="card-ico">💰</div><div class="card-name">Salary in India</div></div>
+        <div class="salary-boxes" id="salaryRow"></div>
+      </div>
+      <div class="icard full">
+        <div class="card-top"><div class="card-ico">🏢</div><div class="card-name">Top Companies Hiring</div></div>
+        <div class="co-wrap" id="coList"></div>
+      </div>
+    </div>
+
+    <div class="result-btns">
+      <a href="skills.html" class="btn-solid">Try Another Profile →</a>
+      <button class="btn-hollow" onclick="window.print()">Save / Print</button>
+    </div>
+
+  </div>
+</div>
 
 <script>
+const API = "http://localhost:5000/api";
+const u = localStorage.getItem("user");
+if(!u) window.location.href = "signup.html";
+const user = JSON.parse(u || "{}");
 
-let career = localStorage.getItem("careerResult");
-let skills = localStorage.getItem("skills");
-let interest = localStorage.getItem("interest");
-let cgpa = localStorage.getItem("cgpa");
-let field = localStorage.getItem("field");
+const skills   = localStorage.getItem("skills")   || "";
+const interest = localStorage.getItem("interest") || "";
+const cgpa     = localStorage.getItem("cgpa")     || "";
+const field    = localStorage.getItem("field")    || "";
 
-document.getElementById("career").textContent =
-"Recommended Career: " + career;
-
-document.getElementById("reason").innerHTML =
-"Based on your details:<br><br>" +
-"Skills: " + skills + "<br>" +
-"Interest: " + interest + "<br>" +
-"CGPA: " + cgpa + "<br>" +
-"Preferred Field: " + field + "<br><br>" +
-"The system recommends <b>" + career +
-"</b> as the most suitable career option.";
-
-function goBack() {
-    window.location.href = "skills.html";
+function parse(text){
+  const r = {title:"",why:"",skills:[],roadmap:[],salary:"",companies:[]};
+  let sec = "";
+  for(const raw of text.split("\n")){
+    const l = raw.trim(); if(!l) continue;
+    if(l.startsWith("CAREER TITLE:"))       { r.title = l.replace("CAREER TITLE:","").trim(); }
+    else if(l.startsWith("WHY THIS FITS"))  { sec="why"; r.why = l.replace(/^WHY THIS FITS YOU:/,"").trim(); }
+    else if(l.startsWith("TOP SKILLS"))     { sec="skills"; }
+    else if(l.startsWith("ROADMAP:"))       { sec="roadmap"; }
+    else if(l.startsWith("SALARY IN INDIA:")){ sec="salary"; r.salary = l.replace("SALARY IN INDIA:","").trim(); }
+    else if(l.startsWith("TOP COMPANIES:")) {
+      sec="companies";
+      const v = l.replace("TOP COMPANIES:","").trim();
+      if(v) r.companies = v.split(",").map(c=>c.trim()).filter(Boolean);
+    }
+    else if(/^[•\-*]/.test(l)){
+      const v = l.replace(/^[•\-*]\s*/,"").trim();
+      if(sec==="skills")    r.skills.push(v);
+      if(sec==="roadmap")   r.roadmap.push(v);
+      if(sec==="companies") r.companies.push(v);
+    }
+    else if(sec==="why" && r.why) r.why += " " + l;
+  }
+  return r;
 }
 
-</script>
+function mkList(id, items){
+  document.getElementById(id).innerHTML = items.length
+    ? items.map(i=>`<li>${i}</li>`).join("")
+    : `<li>No data available</li>`;
+}
 
+function mkSalary(text){
+  const el = document.getElementById("salaryRow");
+  el.innerHTML = "";
+  const tiers = [
+    {l:"Entry Level", re:/entry[^:]*:\s*([^|]+)/i},
+    {l:"Mid Level",   re:/mid[^:]*:\s*([^|]+)/i},
+    {l:"Senior",      re:/senior[^:]*:\s*([^\n|]+)/i}
+  ];
+  let found = false;
+  tiers.forEach(t => {
+    const m = text.match(t.re);
+    if(m){ found=true; el.innerHTML += `<div class="sal-box"><div class="sal-lbl">${t.l}</div><div class="sal-val">${m[1].trim()}</div></div>`; }
+  });
+  if(!found) el.innerHTML = `<p style="color:var(--muted);font-size:14px">${text||"Check Naukri / LinkedIn for current figures"}</p>`;
+}
+
+function mkCompanies(items){
+  const el = document.getElementById("coList");
+  el.innerHTML = items.length
+    ? items.map(c=>`<span class="co-pill">${c}</span>`).join("")
+    : `<span style="color:var(--muted);font-size:14px">No data available</span>`;
+}
+
+function renderResult(p) {
+  document.getElementById("cTitle").textContent = p.title || "Your Career Path";
+  document.getElementById("cWhy").textContent   = p.why   || "";
+  mkList("skillsList", p.skills);
+  mkList("roadList",   p.roadmap);
+  mkSalary(p.salary);
+  mkCompanies(p.companies);
+  document.getElementById("loadState").style.display   = "none";
+  document.getElementById("resultState").style.display = "block";
+}
+
+async function load(){
+  try {
+    const res = await fetch(`${API}/career`, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({skills, interest, cgpa, field, userId: user.id})
+    });
+    const data = await res.json();
+    if(!data.success) throw new Error(data.error || "Unknown error");
+
+    const p = parse(data.result);
+
+    // ✅ Save result so we don't call API again on re-visit
+    sessionStorage.setItem("careerResult", JSON.stringify(p));
+
+    renderResult(p);
+
+  } catch(err){
+    console.error(err);
+    document.getElementById("loadState").style.display = "none";
+    document.getElementById("errState").style.display  = "block";
+    document.getElementById("errMsg").textContent = err.message + " — Make sure backend is running: cd backend && npm start";
+  }
+}
+
+// ✅ Only call API if we don't already have a result
+const cached = sessionStorage.getItem("careerResult");
+if (cached) {
+  renderResult(JSON.parse(cached));
+} else {
+  load();
+}
+</script>
 </body>
 </html>

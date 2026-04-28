@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Page Not Found | AI Career Guide</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><text y='32' font-size='32'>🎯</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#06060f; --surface:#0e0e1c; --card:#13131f;
+  --border:rgba(255,255,255,0.08); --accent:#7c6ef9;
+  --text:#f0f0f4; --muted:#888899;
+  --font:'Nunito',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;font-size:15px;display:flex;flex-direction:column;}
+
+.topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 48px;border-bottom:1px solid var(--border);background:rgba(6,6,15,0.92);backdrop-filter:blur(20px);}
+.logo{font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.logo em{font-style:normal;color:var(--accent);}
+
+.container{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;position:relative;overflow:hidden;}
+
+.glow{position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(124,110,249,0.08) 0%,transparent 70%);border-radius:50%;pointer-events:none;}
+
+.error-num{font-size:120px;font-weight:800;letter-spacing:-8px;line-height:1;background:linear-gradient(135deg,var(--accent),#a89cf7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;animation:up 0.6s ease both;}
+
+.error-icon{font-size:48px;margin-bottom:20px;animation:up 0.6s 0.1s ease both;}
+
+.error-title{font-size:28px;font-weight:800;letter-spacing:-0.5px;margin-bottom:12px;animation:up 0.6s 0.15s ease both;}
+
+.error-sub{color:var(--muted);font-size:15px;line-height:1.8;max-width:400px;margin:0 auto 36px;animation:up 0.6s 0.2s ease both;}
+
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:up 0.6s 0.25s ease both;}
+.btn-solid{padding:13px 32px;border-radius:100px;background:var(--accent);color:#fff;border:none;font-family:var(--font);font-weight:800;font-size:15px;cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-solid:hover{opacity:0.88;transform:translateY(-1px);}
+.btn-hollow{padding:13px 32px;border-radius:100px;background:transparent;color:var(--text);border:1px solid var(--border);font-family:var(--font);font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;transition:all 0.2s;display:inline-block;}
+.btn-hollow:hover{border-color:rgba(255,255,255,0.25);}
+
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:600px){
+  .topbar{padding:14px 18px;}
+  .error-num{font-size:80px;}
+  .error-title{font-size:22px;}
+  .btns{flex-direction:column;align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Career<em>AI</em></div>
+</div>
+
+<div class="container">
+  <div class="glow"></div>
+  <div class="error-num">404</div>
+  <div class="error-icon">🔭</div>
+  <div class="error-title">Page Not Found</div>
+  <p class="error-sub">Oops! The page you're looking for doesn't exist. The link might be incorrect or the page may have been removed.</p>
+  <div class="btns">
+    <a href="skills.html" class="btn-solid">Go to Home →</a>
+    <a href="history.html" class="btn-hollow">My History</a>
+  </div>
+</div>
+
+</body>
+</html>
